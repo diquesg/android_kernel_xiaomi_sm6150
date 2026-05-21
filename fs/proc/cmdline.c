@@ -51,7 +51,7 @@ static void proc_command_line_init(void) {
 
 #if defined(CONFIG_CMDLINE_HWC_IS_SKU) || defined(CONFIG_CMDLINE_HWC_IS_PRODUCT_SKU)
 	char* hwc_offset_addr;
-	char hwc_value[8] = "";
+	char hwc_value[8]; // 🟢 DEIXE APENAS ASSIM, SEM O ' = "" ' !
 
 	hwc_offset_addr = strstr(proc_command_line, HWC_STR_FIND);
 #endif
