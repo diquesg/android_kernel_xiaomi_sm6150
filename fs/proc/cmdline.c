@@ -28,6 +28,10 @@
 static char proc_command_line[COMMAND_LINE_SIZE];
 static void proc_command_line_init(void) {
 	char *offset_addr;
+#if defined(CONFIG_CMDLINE_HWC_IS_SKU) || defined(CONFIG_CMDLINE_HWC_IS_PRODUCT_SKU)
+	char *hwc_offset_addr;
+	char hwc_value[8] = "";
+#endif
 	strcpy(proc_command_line, saved_command_line);
 #ifdef CONFIG_INITRAMFS_IGNORE_SKIP_FLAG
 	offset_addr = strstr(proc_command_line, INITRAMFS_STR_FIND);
@@ -35,28 +39,26 @@ static void proc_command_line_init(void) {
 		memcpy(offset_addr, INITRAMFS_STR_REPLACE, INITRAMFS_STR_LEN);
 #endif
 #if defined(CONFIG_CMDLINE_HWC_IS_SKU) || defined(CONFIG_CMDLINE_HWC_IS_PRODUCT_SKU)
-    char* hwc_offset_addr;
-    char hwc_value[8] = "";
-    hwc_offset_addr = strstr(proc_command_line, HWC_STR_FIND);
+	hwc_offset_addr = strstr(proc_command_line, HWC_STR_FIND);
 #endif
 #ifdef CONFIG_CMDLINE_HWC_IS_SKU
-    if (hwc_offset_addr) {
-        memcpy(hwc_value, hwc_offset_addr + HWC_STR_LEN,
-               strstr(hwc_offset_addr + HWC_STR_LEN, " ") - (hwc_offset_addr + HWC_STR_LEN));
-        strcat(proc_command_line, SKU_STR_INSERT);
-        strcat(proc_command_line, hwc_value);
-    }
+	if (hwc_offset_addr) {
+		memcpy(hwc_value, hwc_offset_addr + HWC_STR_LEN,
+		       strstr(hwc_offset_addr + HWC_STR_LEN, " ") - (hwc_offset_addr + HWC_STR_LEN));
+		strcat(proc_command_line, SKU_STR_INSERT);
+		strcat(proc_command_line, hwc_value);
+	}
 #endif
 #ifdef CONFIG_CMDLINE_HWC_IS_PRODUCT_SKU
-    if (hwc_offset_addr) {
-        memcpy(hwc_value, hwc_offset_addr + HWC_STR_LEN,
-               strstr(hwc_offset_addr + HWC_STR_LEN, " ") - (hwc_offset_addr + HWC_STR_LEN));
-        strcat(proc_command_line, PRODUCT_SKU_STR_INSERT);
-        strcat(proc_command_line, hwc_value);
-    }
+	if (hwc_offset_addr) {
+		memcpy(hwc_value, hwc_offset_addr + HWC_STR_LEN,
+		       strstr(hwc_offset_addr + HWC_STR_LEN, " ") - (hwc_offset_addr + HWC_STR_LEN));
+		strcat(proc_command_line, PRODUCT_SKU_STR_INSERT);
+		strcat(proc_command_line, hwc_value);
+	}
 #endif
 }
-#endif
+#endif /* ALTER_CMDLINE */
 
 #ifdef CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG
 extern struct static_key_false susfs_is_fake_cmdline_or_bootconfig_buffer_set;
