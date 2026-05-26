@@ -32,6 +32,8 @@
 #include <linux/dnotify.h>
 #include <linux/compat.h>
 
+#include <linux/susfs.h>
+
 #include "internal.h"
 
 int do_truncate2(struct vfsmount *mnt, struct dentry *dentry, loff_t length,
